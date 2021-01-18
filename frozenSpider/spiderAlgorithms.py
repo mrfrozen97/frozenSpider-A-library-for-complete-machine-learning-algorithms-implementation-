@@ -29,3 +29,90 @@ plot2.plot_model(save_fig_path="plot2")
 
 
 """
+
+
+
+
+#LOR TSNE
+"""
+
+
+model = TSNE(n_components=2)
+tsne_data = model.fit_transform(x_train)
+
+#tsne_data = np.array(tsne_data).T
+class1 = []
+class2 = []
+
+
+for i in range(len(y_train)):
+    if y_train[i] == 0:
+        class1.append(tsne_data[i])
+    else:
+        class2.append(tsne_data[i])
+
+class1 = np.array(class1).T
+class2 = np.array(class2).T
+
+plt.scatter(class1[0], class1[1], color="#FFA500")
+plt.scatter(class2[0], class2[1], color="#800080")
+plt.show()
+
+
+
+
+
+tsne_data = model.fit_transform(x_test)
+
+#tsne_data = np.array(tsne_data).T
+class1 = []
+class2 = []
+
+
+for i in range(len(lor.y_calculated)):
+    if lor.y_calculated[i] == 0:
+        class1.append(x_test[i])
+    else:
+        class2.append(x_test[i])
+
+class1 = np.array(class1).T
+class2 = np.array(class2).T
+
+plt.scatter(class1[0], class1[1], color="#FFA500", alpha=0.6)
+plt.scatter(class2[0], class2[1], color="#800080", alpha=0.6)
+plt.show()
+
+
+
+
+model1 = TSNE(n_components=3)
+tsne_data = model1.fit_transform(x_train)
+
+#tsne_data = np.array(tsne_data).T
+class1 = []
+class2 = []
+
+
+for i in range(len(y_train)):
+    if y_train[i] == 0:
+        class1.append(tsne_data[i])
+    else:
+        class2.append(tsne_data[i])
+
+class1 = np.array(class1).T
+class2 = np.array(class2).T
+
+
+
+
+fig = plt.figure()
+ax = plt.axes(projection='3d')
+ax.set_facecolor((0, 0, 0))
+ax.scatter3D(class1[0], class1[1], class1[2], color="#800080", alpha=0.9)
+ax.scatter3D(class2[0], class2[1], class2[2], color="#FFA500", alpha=0.9)
+plt.show()
+
+
+
+
+"""

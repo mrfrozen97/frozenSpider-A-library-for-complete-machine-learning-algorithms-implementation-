@@ -1,12 +1,12 @@
 """
 
-Implementation of ML introductory algorithms with visulisation
+Implementation of ML introductory algorithms visulisation as ancillary
 Author - mr frozen (or just frozen)
 Github - github.com/mrfrozen97
 Mail - mrfrozenpeak@gmail.com
 
 This file has class that performs linear regression algorithm to the input data and can also visualise it .
-The packages used here are numpy(for efficiency of calculations) and pyplot(for data visualisation)
+The packages used here are numpy(for efficient calculations) and matplotlib(for data visualisation)
 
 
 
@@ -129,7 +129,7 @@ You can print this dict i.e. print(object.get_color_dict()) to know which colors
 You are most welcomed to improve this code:
 You can pull request for this code at
 
-github.com/mrfrozen97/spiderAlgorithms
+github.com/mrfrozen97/               (In spider algorithms repo)
 or
 Email - mrfrozenpeak@gmail.com
 
@@ -141,7 +141,7 @@ Email - mrfrozenpeak@gmail.com
 
 import numpy as np
 import matplotlib.pyplot as plt
-
+import math
 
 
 
@@ -160,7 +160,7 @@ It also returns values of squared mean error in squared_error function
 
 """
 
-class linear_regression:
+class Linear_regression:
 
 
     def __init__(self):
@@ -195,6 +195,34 @@ class linear_regression:
         self.b = bestFint_numerator/bestFint_denominator
         self.a = y_coordinates_mean - (self.b*x_coordinates_mean)
         return self.a, self.b
+
+
+
+
+    def bestFit_logrithemic(self, x_coordinates, y_coordinates, base=math.e):
+
+        y_coordinates = [math.log(x, base) for x in x_coordinates]
+
+        size_coordinates = np.size(x_coordinates)
+        x_coordinates_mean = np.sum(x_coordinates)/size_coordinates
+        y_coordinates_mean = np.sum(y_coordinates)/size_coordinates
+
+        self.x = x_coordinates
+        self.y = y_coordinates
+        self.size = size_coordinates
+        self.x_mean = x_coordinates_mean
+        self.y_mean = y_coordinates_mean
+
+        bestFint_numerator = (np.sum(np.multiply(x_coordinates, y_coordinates))/size_coordinates) - (x_coordinates_mean*y_coordinates_mean)
+        bestFint_denominator = (np.sum(np.multiply(x_coordinates,x_coordinates))/size_coordinates) - (x_coordinates_mean**2)
+        self.b = bestFint_numerator/bestFint_denominator
+        self.a = y_coordinates_mean - (self.b*x_coordinates_mean)
+        return self.a, self.b
+
+
+
+
+
 
 
 
@@ -245,7 +273,7 @@ All the default values of the above variables are already set so you can directl
 
 """
 
-class plot_model(linear_regression):
+class plot_model(Linear_regression):
 
 
     #All the default value are already set but they can all be reset.........................
@@ -278,15 +306,21 @@ class plot_model(linear_regression):
         self.unknown_points_alpha = 0.8
 
 
+
+
+
     #Function to get dictionary to access the different options avaliable for the colors.........................
 
     def get_color_dict(self):
         return self.color_dict
 
 
-    #function to set vlues for title, x/y label and values of labels in case.........................
 
-    def set_marker_properties(self,unknown_points_alpha=0.8, unknown_points_color = "Orange", unknown_points_size = 20, xlabel_count=15, label_default=True, ylabel_count=15, title_size=15, xlabel_size=10, ylabel_size=10, title="Linear Regression", x_label="x coordinates", y_label="y coordinates", title_color="#FF0000", xlabel_color="#663399", ylabel_color="#663399"):
+
+
+
+    #function to set vlues for title, x/y label and values of labels in case.........................
+    def set_marker_properties(self,unknown_points_alpha=0.8, unknown_points_color = "Orange", unknown_points_size = 20, xlabel_count=17, label_default=True, ylabel_count=12, title_size=15, xlabel_size=10, ylabel_size=10, title="Linear Regression", x_label="x coordinates", y_label="y coordinates", title_color="#FF0000", xlabel_color="#663399", ylabel_color="#663399"):
         self.title_size = title_size
         self.xlabel_size = xlabel_size
         self.ylabel_size = ylabel_size
@@ -307,6 +341,10 @@ class plot_model(linear_regression):
 
 
 
+
+
+
+
    #Sets the display size which will be equal to size of image if it is being svaed.........................
 
     def set_display_size(self, sizeX, sizeY):
@@ -314,38 +352,43 @@ class plot_model(linear_regression):
         self.sizeY = sizeY
 
 
+
+
+
+
     #function to create x,y values according to the best fit line equation................................
     def create_best_fit_line(self):
         y_coords_line = []
+        x_coords_line = list(self.model.x)
         for i in self.model.x:
             y_coords_line.append(self.model.b*i + self.model.a)
+        #print(self.model.calculated_x)
+        for i in self.model.calculated_x:
+            x_coords_line.append(i)
+            y_coords_line.append(self.model.b*i + self.model.a)
+        #print(len(self.model.x) - len(self.model.y))
+        return x_coords_line, y_coords_line
 
-        return y_coords_line
 
 
-    #main fuction thats plots the graph and saved it if path provided.........................
 
-    def plot_model(self,label="Points",alpha=0.6, point_size=25,label_x=[], label_y=[],line_color='Purple',unknown_points_label="Unknown points",line_label='Best Fit line', point_color='DeepSkyBlue', save_fig_path='dont'):
 
-        y_bestFitLine_coords = self.create_best_fit_line()
 
-        plt.plot( self.model.x, y_bestFitLine_coords, color=self.color_dict[line_color], label=line_label)                     #plot the best fit line
-        plt.scatter(self.model.x, self.model.y, zorder=3, label=label, s=point_size, color=self.color_dict[point_color], alpha=alpha)       #plot all the points
-        plt.scatter(self.model.calculated_x, self.model.calculated_y, color=self.color_dict[self.unknown_points_color], label=unknown_points_label, zorder = 4, alpha=self.unknown_points_alpha, s=self.unknown_points_size)
-        plt.title(self.title, fontdict={"fontsize": 15}, color=self.title_color)
-        plt.xlabel(self.x_label, fontdict={"fontsize": 15}, color=self.xlabel_color)
-        plt.ylabel(self.y_label, fontdict={"fontsize": 15}, color=self.ylabel_color)
 
+    #This function creates f\default ticks for x and y axis ....
+    def generate_ticks(self, label_x, label_y):
         if self.label_default or len(label_x)==0 or len(label_y)==0:
-             min_y = min(0, min(self.model.y))
-             min_x = min(0, min(self.model.x))
-             max_y = max(self.model.y)
+             min_y = min(self.model.y)
+             min_x = min(self.model.x)
+             max_y = max(max(self.model.y), max(self.model.calculated_y))
              max_y += int(max_y*0.3)
-             max_x = max(self.model.x)
+             max_x = max(max(self.model.x), max(self.model.calculated_x))
              max_x += int(max_x * 0.2)
-             dif_y = max(1, int(len(self.model.y)/self.labely_count))
-             dif_x = max(1, int(len(self.model.x)/self.labelx_count))
-            # print(dif_x, dif_y)
+            # dif_y = max(1, int(len(self.model.y)/self.labely_count))
+             dif_y = max(1, int((max_y-min_y) / self.labely_count))
+             #dif_x = max(1, int(len(self.model.x)/self.labelx_count))
+             dif_x = max(1, int((max_x-min_x) / self.labelx_count))
+             print(dif_x, dif_y)
              x_labels_default = []
              y_labels_default = []
 
@@ -371,6 +414,31 @@ class plot_model(linear_regression):
 
 
 
+
+
+
+
+
+
+    #main fuction thats plots the graph and saved it if path provided.........................
+
+    def plot_model(self,label="Points",alpha=0.6, point_size=25,label_x=[], label_y=[],line_color='Purple',unknown_points_label="Unknown points",line_label='Best Fit line', point_color='DeepSkyBlue', save_fig_path='dont'):
+
+
+        #These are the coordinates to plot the line which is inclusion of both known and calculated points
+        x_bestFitLine_coords, y_bestFitLine_coords = self.create_best_fit_line()
+
+        plt.plot(x_bestFitLine_coords, y_bestFitLine_coords, color=self.color_dict[line_color], label=line_label)                     #plot the best fit line
+        plt.scatter(self.model.x, self.model.y, zorder=3, label=label, s=point_size, color=self.color_dict[point_color], alpha=alpha)       #plot all the points
+        plt.scatter(self.model.calculated_x, self.model.calculated_y, color=self.color_dict[self.unknown_points_color], label=unknown_points_label, zorder = 4, alpha=self.unknown_points_alpha, s=self.unknown_points_size)
+        plt.title(self.title, fontdict={"fontsize": 15}, color=self.title_color)
+        plt.xlabel(self.x_label, fontdict={"fontsize": 15}, color=self.xlabel_color)
+        plt.ylabel(self.y_label, fontdict={"fontsize": 15}, color=self.ylabel_color)
+
+        self.generate_ticks(label_x, label_y)
+
+
+
         plt.legend(loc = 'upper left')
 
         if self.showGrid:
@@ -392,3 +460,27 @@ class plot_model(linear_regression):
 
 
 
+#Sample code to work with this file of the library
+"""
+
+x = [-22, 17, 22, 28, 35]
+y = [-9.3, 5, 8, 12, 14]
+x1 = [13, 47]
+
+
+le1 = linear_regression()
+a,b =le1.bestFit(x, y)
+le1.find_unknowns(x1)
+
+
+print("Slope = " + str(b))
+print("x intercept = " + str(a))
+print("Squared error = "+ str(le1.squared_error()))
+
+
+plot2 = plot_model(le1)
+plot2.set_marker_properties(unknown_points_size=80, unknown_points_alpha=0.6, unknown_points_color='Red')
+plot2.plot_model(save_fig_path="plot2")
+
+
+"""
