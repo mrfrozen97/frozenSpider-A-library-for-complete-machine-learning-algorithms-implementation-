@@ -1,7 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import random
 
-
+from sklearn import datasets
+from sklearn.model_selection import  train_test_split
+from frozenSpider import Data_visualisation as dt
 
 
 
@@ -15,18 +18,23 @@ class K_nearest_neighbours():
         self.y_classified = []
 
 
-
-
     def nearest_neighbour(self, distances_y, k):
-
+       # print(collections.OrderedDict(sorted(y.items())))
+        ndistances_y = {}
+        count_k = 0
+        for key in sorted(distances_y):
+            count_k+=1
+            ndistances_y[key] = distances_y[key]
+            if count_k==k:
+                break
         nearest = {}
-        for i in range(k):
-            if distances_y[i][1] in nearest:
-                nearest[distances_y[i][1]] +=1
+        for key in ndistances_y:
+            if ndistances_y[key] in nearest:
+                nearest[ndistances_y[key]] +=1
             else:
-                nearest[distances_y[i][1]] = 1
+                nearest[ndistances_y[key]] = 1
 
-        print(nearest)
+       # print(nearest)
         max_points = 0
         max_key = 0
         for key in nearest:
@@ -52,17 +60,18 @@ class K_nearest_neighbours():
 
             x_arr = np.array(x_arr)
 
-            print(np.sum(np.square(x_arr-self.x_data), axis=1))
+            #print(np.sum(np.square(x_arr-self.x_data), axis=1))
 
             distances = np.array(np.sqrt(np.sum(np.square(x_arr-self.x_data), axis=1)))
-            distances_y = []
+            distances_y = {}
 
             for i in range(len(distances)):
-                distances_y.append([distances[i], self.y_data[i]])
-            distances_y = np.array(distances_y)
-            distances_y.sort(axis=0)
-            near_points, near_class = self.nearest_neighbour(distances_y, self.k)
 
+                 distances_y[distances[i]] = self.y_data[i]
+
+
+            near_points, near_class = self.nearest_neighbour(distances_y, self.k)
+           # print(near_class)
             confidence = near_points/ self.k * 100
 
             near_classes.append(near_class)
@@ -119,11 +128,15 @@ class plot_model():
                            "DeepSkyBlue": "#00BFFF", "Blue": "#0000FF", "MediumBlue": "#0000CD", "Navy": "#000080",
                            "Black": "#000000", "Gray": "#808080"}
         self.calculated_point_size = 10
-        self.calculated_point_class0_label = "Calculated class 0"
-        self.calculated_point_class1_label = "Calculated class 1"
-        self.calculated_point_class0_color = "Red"
-        self.calculated_point_class1_color = "Cyan"
         self.calculated_point_alpha = 0.5
+        self.train_labels = []
+        self.test_labels = []
+        self.train_data_color = [key for key in sorted(self.color_dict)[:15]]
+        self.test_data_color = [key for key in sorted(self.color_dict)[15:]]
+        random.shuffle(self.train_data_color)
+        random.shuffle(self.test_data_color)
+        self.legend_position = "upper right"
+        self.plot_background = 'dark'
 
 
 
@@ -155,24 +168,29 @@ class plot_model():
 
 
 
-    def set_marker_properties(self, label_default=True, calculated_point_class1_label = "Calculated class 1", calculated_point_class0_label="Calculated class 0", calculated_point_alpha = 0.5,  calculated_point_class1_color='Red',calculated_point_class0_color="Cyan", title_size=15, xlabel_size=10, ylabel_size=10, title="Output vs dimention", y_label="y coordinates", title_color="#FF0000", xlabel_color="#663399", ylabel_color="#663399"):
+    def set_marker_properties(self,plot_background='dark', legend_position="upper right", train_labels=[], test_labels=[], label_default=True, calculated_point_class1_label = "Calculated class 1", calculated_point_class0_label="Calculated class 0", calculated_point_alpha = 0.5,  calculated_point_class1_color='Red',calculated_point_class0_color="Cyan", title_size=15, xlabel_size=10, ylabel_size=10, title="Output vs dimention", y_label="y coordinates", title_color="#FF0000", xlabel_color="#663399", ylabel_color="#663399"):
         self.title_size = title_size
         self.xlabel_size = xlabel_size
         self.ylabel_size = ylabel_size
         self.y_label = y_label
         self.title = title
+
         self.xlabel_color = xlabel_color
         self.ylabel_color = ylabel_color
         self.title_color = title_color
         self.label_default = label_default
         self.calculated_point_size = 10
+
         self.calculated_point_class0_label = calculated_point_class0_label
         self.calculated_point_class1_label = calculated_point_class1_label
         self.calculated_point_class0_color = calculated_point_class0_color
         self.calculated_point_class1_color = calculated_point_class1_color
+
         self.calculated_point_alpha = calculated_point_alpha
-
-
+        self.train_labels = train_labels
+        self.test_labels = test_labels
+        self.legend_position = legend_position
+        self.plot_background = plot_background
 
 
 
@@ -200,12 +218,12 @@ class plot_model():
 
 
         # These are the coordinates to plot the line which is inclusion of both known and calculated points
-
-
+        if self.plot_background=='dark':
+              plt.style.use('dark_background')
         multi_dimentions = np.array(self.model.x_data)
         multi_dimentions_calculated = np.array(self.model.x_classified)
        # print(len(multi_dimentions[0]))
-        print(multi_dimentions)
+        #print(multi_dimentions)
 
         for dimention in range(len(multi_dimentions[0])):
 
@@ -221,47 +239,78 @@ class plot_model():
                     y_train_data[self.model.y_data[i]] = [a[dimention]]
 
             for i, a in enumerate(multi_dimentions_calculated):
-                print(i)
+
                 if self.model.y_classified[i] in y_test_data:
                     y_test_data[self.model.y_classified[i]].append(a[dimention])
                 else:
                     y_test_data[self.model.y_classified[i]] = [a[dimention]]
                 #x_train_data.append(i[dimention])
+            #print(y_test_data)
 
+           # print(y_train_data)
 
-            print(y_train_data)
-
+            index_color = 0
             for group in y_train_data:
-                print(group)
+                #print(group)
                 y_plot_axis = []
+
+                if len(self.train_labels)==0:
+                    actual_train_label = "train class" + str(group)
+                else:
+                    actual_train_label = self.train_labels[index_color]
+
                 for i in range(len(y_train_data[group])):
                     y_plot_axis.append(group)
-                plt.scatter(y_train_data[group], y_plot_axis, color=self.color_dict[class1_color],
-                            label="class" + str(group) , alpha=alpha, zorder=3)                     #plot the best fit line
+                plt.scatter(y_train_data[group], y_plot_axis,
+                            color=self.color_dict[self.train_data_color[index_color%15]],
+                            label=actual_train_label,
+                            alpha=alpha,
+                            zorder=3)                     #plot the best fit line
+                index_color+=1
 
 
+            index_color = 0
 
             if display_calculated_points:
+
                 for group in y_test_data:
+                    #print(group)
                     y_plot_axis = []
+
+                    if len(self.test_labels) == 0:
+                        actual_test_label = "test class" + str(group)
+                    else:
+                        actual_test_label = self.test_labels[index_color]
+
+
                     for i in range(len(y_test_data[group])):
                         y_plot_axis.append(group)
 
-                    plt.scatter(y_test_data[group], y_plot_axis, color=self.color_dict[class0_color],
-                          label="class 0", alpha=alpha, zorder=3)  # plot the best fit line
+                    plt.scatter(y_test_data[group], y_plot_axis,
+                                label=actual_test_label,
+                                alpha=alpha,
+                                zorder=3,
+                                color=self.color_dict[self.test_data_color[index_color%15]])  # plot the best fit line
 
-         
-
-
-            plt.title(self.title, fontdict={"fontsize": 15}, color=self.title_color)
-            plt.xlabel(self.x_label[dimention], fontdict={"fontsize": 15}, color=self.xlabel_color)
-            plt.ylabel(self.y_label, fontdict={"fontsize": 15}, color=self.ylabel_color)
+                    index_color +=1
 
 
 
+            plt.title(self.title,
+                      fontdict={"fontsize": 15},
+                      color=self.title_color)
+            plt.xlabel(self.x_label[dimention],
+                       fontdict={"fontsize": 15},
+                       color=self.xlabel_color)
+            plt.ylabel(self.y_label,
+                       fontdict={"fontsize": 15},
+                       color=self.ylabel_color)
 
 
-            plt.legend(loc = 'upper left')
+
+
+
+            plt.legend(loc = self.legend_position)
 
             if self.showGrid:
                 plt.grid(color='#cfd8dc', zorder=0)
@@ -287,19 +336,28 @@ class plot_model():
 x = [[1, 1], [2, 2], [3, 3]]
 y = [0, 0, 1]
 
-a = K_nearest_neighbours(x, y, 3)
-group, confidence = a.classify([[1.5, 1.5]])
+
+bc = datasets.load_breast_cancer()
+x, y = bc.data, bc.target
+
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=1234)
 
 
+a = K_nearest_neighbours(x_train, y_train, 3)
+group, confidence = a.classify(x_test)
+
+
+
+#print(group, confidence)
 pl = plot_model(a)
-pl.plot_model()
-
-
-print(group, confidence)
+#pl.plot_model()
 
 
 
 
+
+plot1 = dt.Knn_plot(a)
+plot1.plot_3D_visuals()
 
 
 
