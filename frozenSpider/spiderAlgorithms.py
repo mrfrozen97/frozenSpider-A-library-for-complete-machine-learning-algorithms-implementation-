@@ -116,3 +116,78 @@ plt.show()
 
 
 """
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
+
+
+bc1 = datasets.load_wine()
+x1, y1 = bc1.data, bc1.target
+print(y1)
+x_train1, x_test1, y_train1, y_test1 = train_test_split(x1, y1, test_size=0.2, random_state=1234)
+
+
+lor1 = lore.LogisticRegression(learning_rate=0.01, n_iters=10000)
+lor1.best_fit(x_train1, y_train1)
+prediction1 = lor1.predict(x_test1)
+
+accuracy1 = np.sum(prediction1 == y_test1)/ len(prediction1)
+
+print(accuracy1)
+
+
+plotly1 = ninja_technique()
+plotly11 = ninja_technique()
+plotly1.calculate(lor1, x_train1, y_train1 )
+plotly1.plot()
+plotly11.calculate(lor1, x_test1, y_test1)
+plotly11.plot()
+
+
+datav = Logistic_regression_plot2D(lor1)
+datav.plot_2D_visuals(plot_test_data=False)
+
+
+
+bc1 = datasets.load_iris()
+x1, y1 = bc1.data, bc1.target
+
+x_train1, x_test1, y_train1, y_test1 = train_test_split(x1, y1, test_size=0.2, random_state=1234)
+
+
+lor1 = lore.LogisticRegression(learning_rate=0.01, n_iters=100000)
+lor1.best_fit(x_train1, y_train1)
+prediction1 = lor1.predict(x_test1)
+
+accuracy1 = np.sum(prediction1 == y_test1)/ len(prediction1)
+
+print(accuracy1)
+
+
+plotly1 = ninja_technique()
+plotly11 = ninja_technique()
+plotly1.calculate(lor1, x_train1, y_train1)
+plotly1.plot()
+plotly11.calculate(lor1, x_test1, y_test1)
+plotly11.plot()
+
+
+
+"""
