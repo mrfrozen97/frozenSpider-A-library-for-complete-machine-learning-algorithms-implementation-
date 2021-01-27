@@ -98,6 +98,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.manifold import TSNE
 import random
+from frozenSpider import spiderAlgorithmResources as res
 import sklearn
 import math
 from sklearn import datasets
@@ -132,18 +133,7 @@ class Logistic_regression_plot():
         self.test_class1_label = "class1 test"
         self.test_alpha = 0.6
         self.train_alpha = 0.9
-        self.color_dict = {"Red": "#FF0000", "Orange": "#FFA500", "Yellow": "#FFFF00", "DeepPink": "#FF1493",
-                           "LightPink": "#FFB6C1", "LightPink": "#FFB6C1"
-            , "Pink": "#FFC0CB", "Lavender": "#E6E6FA", "Orchid": "#DA70D6", "Violet": "#EE82EE",
-                           "DarkOrchid": "#9932CC", "DarkViolet": "#9400D3"
-            , "BlueViolet": "#8A2BE2", "Purple": "#800080", "Purple": "#800080", "Indigo": "#4B0082",
-                           "Salmon": "#FA8072", "Crimson": "#DC143C", "DarkRed": "#8B0000",
-                           "DarkOrange": "#FF8C00", "Coral": "#FF7F50", "OrangeRed": "#FF4500", "Gold": "#FFD700",
-                           "GreenYellow": "#ADFF2F", "Lime": "#00FF00", "PaleGreen": "#98FB98"
-            , "SpringGreen": "#00FF7F", "Green": "#008000", "LightSeaGreen": "#20B2AA", "Cyan": "#00FFFF",
-                           "Aquamarine": "#7FFFD4", "SkyBlue": "#87CEEB",
-                           "DeepSkyBlue": "#00BFFF", "Blue": "#0000FF", "MediumBlue": "#0000CD", "Navy": "#000080",
-                           "Black": "#000000", "Gray": "#808080"}
+        self.color_dict = res.Resources.get_color_dict()
 
 
 
@@ -264,18 +254,7 @@ class Logistic_regression_plot2D():
         self.train_alpha = 0.9
         self.x_label = "X axis"
         self.y_label = "Y axis"
-        self.color_dict = {"Red": "#FF0000", "Orange": "#FFA500", "Yellow": "#FFFF00", "DeepPink": "#FF1493",
-                           "LightPink": "#FFB6C1", "LightPink": "#FFB6C1"
-            , "Pink": "#FFC0CB", "Lavender": "#E6E6FA", "Orchid": "#DA70D6", "Violet": "#EE82EE",
-                           "DarkOrchid": "#9932CC", "DarkViolet": "#9400D3"
-            , "BlueViolet": "#8A2BE2", "Purple": "#800080", "Purple": "#800080", "Indigo": "#4B0082",
-                           "Salmon": "#FA8072", "Crimson": "#DC143C", "DarkRed": "#8B0000",
-                           "DarkOrange": "#FF8C00", "Coral": "#FF7F50", "OrangeRed": "#FF4500", "Gold": "#FFD700",
-                           "GreenYellow": "#ADFF2F", "Lime": "#00FF00", "PaleGreen": "#98FB98"
-            , "SpringGreen": "#00FF7F", "Green": "#008000", "LightSeaGreen": "#20B2AA", "Cyan": "#00FFFF",
-                           "Aquamarine": "#7FFFD4", "SkyBlue": "#87CEEB",
-                           "DeepSkyBlue": "#00BFFF", "Blue": "#0000FF", "MediumBlue": "#0000CD", "Navy": "#000080",
-                           "Black": "#000000", "Gray": "#808080"}
+        self.color_dict = res.Resources.get_color_dict()
 
 
 
@@ -388,18 +367,7 @@ class Knn_plot():
         self.background_color = (0, 0, 0)
         self.test_alpha = 0.6
         self.train_alpha = 0.9
-        self.color_dict = {"Red": "#FF0000", "Orange": "#FFA500", "Yellow": "#FFFF00", "DeepPink": "#FF1493",
-                           "LightPink": "#FFB6C1", "LightPink": "#FFB6C1"
-            , "Pink": "#FFC0CB", "Lavender": "#E6E6FA", "Orchid": "#DA70D6", "Violet": "#EE82EE",
-                           "DarkOrchid": "#9932CC", "DarkViolet": "#9400D3"
-            , "BlueViolet": "#8A2BE2", "Purple": "#800080", "Purple": "#800080", "Indigo": "#4B0082",
-                           "Salmon": "#FA8072", "Crimson": "#DC143C", "DarkRed": "#8B0000",
-                           "DarkOrange": "#FF8C00", "Coral": "#FF7F50", "OrangeRed": "#FF4500", "Gold": "#FFD700",
-                           "GreenYellow": "#ADFF2F", "Lime": "#00FF00", "PaleGreen": "#98FB98"
-            , "SpringGreen": "#00FF7F", "Green": "#008000", "LightSeaGreen": "#20B2AA", "Cyan": "#00FFFF",
-                           "Aquamarine": "#7FFFD4", "SkyBlue": "#87CEEB",
-                           "DeepSkyBlue": "#00BFFF", "Blue": "#0000FF", "MediumBlue": "#0000CD", "Navy": "#000080",
-                           "Black": "#000000", "Gray": "#808080"}
+        self.color_dict = res.Resources.get_color_dict()
         self.train_data_color = [key for key in sorted(self.color_dict)[:15]]
         self.test_data_color = [key for key in sorted(self.color_dict)[15:]]
         random.shuffle(self.train_data_color)
@@ -522,18 +490,7 @@ class Knn_plot_2D():
         self.background_color = (0, 0, 0)
         self.test_alpha = 0.6
         self.train_alpha = 0.9
-        self.color_dict = {"Red": "#FF0000", "Orange": "#FFA500", "Yellow": "#FFFF00", "DeepPink": "#FF1493",
-                           "LightPink": "#FFB6C1", "LightPink": "#FFB6C1"
-            , "Pink": "#FFC0CB", "Lavender": "#E6E6FA", "Orchid": "#DA70D6", "Violet": "#EE82EE",
-                           "DarkOrchid": "#9932CC", "DarkViolet": "#9400D3"
-            , "BlueViolet": "#8A2BE2", "Purple": "#800080", "Purple": "#800080", "Indigo": "#4B0082",
-                           "Salmon": "#FA8072", "Crimson": "#DC143C", "DarkRed": "#8B0000",
-                           "DarkOrange": "#FF8C00", "Coral": "#FF7F50", "OrangeRed": "#FF4500", "Gold": "#FFD700",
-                           "GreenYellow": "#ADFF2F", "Lime": "#00FF00", "PaleGreen": "#98FB98"
-            , "SpringGreen": "#00FF7F", "Green": "#008000", "LightSeaGreen": "#20B2AA", "Cyan": "#00FFFF",
-                           "Aquamarine": "#7FFFD4", "SkyBlue": "#87CEEB",
-                           "DeepSkyBlue": "#00BFFF", "Blue": "#0000FF", "MediumBlue": "#0000CD", "Navy": "#000080",
-                           "Gray": "#808080"}
+        self.color_dict = res.Resources.get_color_dict()
         self.train_data_color = [key for key in sorted(self.color_dict)[:15]]
         self.test_data_color = [key for key in sorted(self.color_dict)[15:]]
         random.shuffle(self.train_data_color)
@@ -625,6 +582,7 @@ class Knn_plot_2D():
                     ploty.append(coordp[1])
 
 
+
                 #ax.text2D(0.98, 0.98-label_dist, group , transform=ax.transAxes, color=self.test_data_color[int(label_dist/0.02)%15-1])
                 plt.scatter(plotx, ploty, alpha=self.train_alpha, label="Test "+str(group),color=self.test_data_color[int(label_dist/0.02)%15-1])
                 label_dist+=0.02
@@ -633,6 +591,127 @@ class Knn_plot_2D():
             plt.savefig(save_fig_path + "/3D" + self.title)
 
         plt.show()
+
+
+
+
+
+
+
+
+
+
+
+
+
+class plot_parallel_plot():
+
+    def __init__(self, x, y, plot_labels=[], class_color=[], save_fig_path='dont'):
+        self.y = np.array(y)
+        self.x = np.array(x)
+        self.x_normalized = []
+        self.plot_labels = []
+        self.class_color =[]
+        self.x_label = "Parameters/Dimensions"
+        self.y_label = "Normalized Values"
+        self.title = "Parallel Plot of Dataset"
+        self.aplha = 0.5
+        self.color_dict = res.Resources.get_color_dict()
+        self.scatter_color = [key for key in sorted(self.color_dict)]
+        self.colorList_len = len(self.scatter_color)
+        random.shuffle(self.scatter_color)
+        self.plot_labels = plot_labels
+        self.class_color = class_color
+
+        self.plot_plot(self.x, self.y, save_fig_path)
+
+
+    def set_plot_properties(self, title="Parallel Plot of Dataset", x_label="Parameters/Dimensions", y_label="Normalized Values", alpha=0.5):
+        self.title = title
+        self.x_label = x_label
+        self.y_label = y_label
+        self.aplha = alpha
+
+
+
+
+    def plot_plot(self, x, y, save_fig_path='dont'):
+        y_classes = np.unique(y)
+        y_class_count = len(y_classes)
+        self.x_normalized = self.normalize(x)
+
+        plt.style.use('dark_background')
+        x_pos = 1
+        index = 0
+        temp_feature = {}#[[]]*y_class_count
+        #print(temp_feature)
+        for feature in self.x_normalized:
+
+            temp_feature = {}# [[]] * y_class_count
+            for i in range(len(feature)):
+                if y[i] in temp_feature:
+                    temp_feature[y[i]].append(feature[i])
+                else:
+                    temp_feature[y[i]] = [feature[i]]
+            index = 0
+            for key in temp_feature:
+
+                if len(self.class_color) == 0:
+                    plt.scatter([x_pos]*len(temp_feature[key]), temp_feature[key], alpha=self.aplha,color=self.scatter_color[index%self.colorList_len])
+                else:
+                    plt.scatter([x_pos] * len(temp_feature[key]), temp_feature[key], alpha=self.aplha,
+                                color=self.class_color[index % len(self.class_color)])
+
+                index += 1
+            x_pos += 1
+            #print(temp_feature)
+
+        index=0
+        for key in temp_feature:
+
+            if len(self.plot_labels) == 0 and len(self.class_color)==0:
+                plt.scatter([], [], label="class "+str(key), color=self.scatter_color[index%self.colorList_len])
+            elif len(self.plot_labels) == 0:
+                plt.scatter([], [], label="class "+str(key), color=self.class_color[index % len(self.class_color)])
+
+            elif len(self.class_color) == 0 :
+                plt.scatter([], [], label=str(self.plot_labels[index % len(self.plot_labels)]), color=self.scatter_color[index % self.colorList_len])
+
+            else:
+                plt.scatter([], [], label=str(self.plot_labels[index%len(self.plot_labels)]), color=self.class_color[index % len(self.class_color)])
+            index+=1
+
+        plt.ylabel(self.y_label)
+        plt.xlabel(self.x_label)
+        plt.title(self.title)
+        plt.legend()
+        if not(save_fig_path=="dont"):
+            plt.savefig(save_fig_path + "/3D" + self.title)
+        plt.show()
+
+
+
+
+
+    def normalize(self, x):
+        x = x.T
+        temp_sum = 0
+        x_normalized = []
+        for i, feature in enumerate(x):
+             x_normalized.append((feature/np.sum(feature)))
+             #print(list(x_normalized[i]))
+
+        return x_normalized
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -695,17 +774,43 @@ class ninja_technique():
 
 
 
+
+
+
+
     def plot(self):
         plt.style.use('dark_background')
         plt.title("Swiss roll dataset plot")
-        plt.scatter(self.x_coords, self.y_oords, label="class 0", color="#800080", alpha=0.7)
-        plt.scatter(self.x_coords1, self.y_oords1, label="class 1", color='#FF8C00', alpha=0.7)
+        plt.scatter(self.x_coords, self.y_oords, label="class 0", color="#800080", alpha=0.3)
+        plt.scatter(self.x_coords1, self.y_oords1, label="class 1", color='#FF8C00', alpha=0.3)
+        plt.legend()
+        plt.show()
+
+    def plot_multi(self ,x1, x2, x3):
+        plt.style.use('dark_background')
+        plt.title("Wine dataset plot")
+        plt.scatter(x1[0], x1[1], label="class 0", color="#800080", alpha=0.3)
+        plt.scatter(x2[0], x2[1], label="class 1", color='#FF8C00', alpha=0.3)
+        plt.scatter(x3[0], x3[1], label="class 2", color='#00FFFF', alpha=0.3)
         plt.legend()
         plt.show()
 
 
-"""
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
 bc = datasets.load_breast_cancer()
 x, y = bc.data, bc.target
 
@@ -719,7 +824,8 @@ y_pred = lor.predict(x)
 prediction = lor.predict(x_test)
 
 accuracy = np.sum(prediction == y_test)/ len(prediction)
-
+print(prediction)
+print(list(y_test))
 print(accuracy)
 
 
@@ -738,15 +844,15 @@ datav.set_plot_properties(train_class0_label="benign", train_class1_label="malig
 datav.plot_2D_visuals(plot_test_data=False)
 
 
+
+"""
+
+
+
 """
 
 
 
-
-
-
-
-"""
 
 data = sklearn.datasets.make_swiss_roll(n_samples=5000, noise=0.2, random_state=None)
 ldata_x = data[0]
@@ -777,7 +883,7 @@ for i in range(len(data[0])):
 
 
 
-lor1 = lore.LogisticRegression(n_iters=10000)
+lor1 = lore.LogisticRegression(learning_rate=0.03,n_iters=100000)
 lor1.best_fit(ldata_x, ldata_y)
 y_data = lor1.predict(ldata_x)
 count = 0
@@ -817,9 +923,8 @@ ax.scatter3D(data1[0], data1[1], data1[2], color="#FF4500", alpha=0.6)
 ax.scatter3D(data2[0], data2[1], data2[2], color="#800080", alpha=0.6)
 plt.show()
 
-
-
 """
+
 
 
 
@@ -899,3 +1004,266 @@ plt.show()
 
 
 
+"""
+data = sklearn.datasets.make_s_curve(n_samples=10000, noise=0.0, random_state=None)
+
+data1 = [[], [], []]
+data2 = [[], [], []]
+y_values = []
+x_data = []
+#data = np.array(data[0]).T
+#print(data[0])
+#error = [-0.25, 0.25]
+error = [0, 0]
+for i in data[0]:
+    if (-1.1<i[2] and i[2]<1.1 and i[0]+i[2]<1.5 and i[0]+i[2]>-1.5 ):
+        x_data.append(i)
+        if i[0] > 0 + random.random()*random.choice(error):
+            data1[0].append(i[2]*100)
+            data1[1].append(i[1]*100)
+            data1[2].append(i[0]*100)
+            y_values.append(1)
+        else:
+            data2[0].append(i[2]*100)
+            data2[1].append(i[1]*100)
+            data2[2].append(i[0]*100)
+            y_values.append(0)
+data1 = np.array(data1)
+data2 = np.array(data2)
+
+lor1 = lore.LogisticRegression(learning_rate=0.3, n_iters=100000)
+lor1.best_fit(x_data, y_values)
+y_data = lor1.predict(x_data, decision_boundary=0.1)
+count = 0
+print(len(y_values))
+print(y_data)
+for i in range(len(y_values)):
+    if y_values[i] == y_data[i]:
+        count+=1
+
+print("Accuracy = "+ str(count*100/len(y_values)))
+
+
+
+plot = Logistic_regression_plot2D(lor1)
+plot.set_plot_properties(title="Swiss Roll dataset")
+plot.plot_2D_visuals()
+
+ ninja_technique()
+nj.calculate(lor1, x_data, y_data)
+nj.plot()
+
+
+plt.style.use('dark_background')
+fig = plt.figure(figsize=(12, 12))
+ax = plt.axes(projection='3d')
+ax.scatter3D(data1[0], data1[1], data1[2], alpha=0.6, color="#800080")
+ax.scatter3D(data2[0], data2[1], data2[2],alpha=0.6, color="#FF4500")
+
+plt.show()
+
+
+"""
+
+
+
+
+
+"""
+
+bc = datasets.load_iris()
+x, y = bc.data, bc.target
+
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=1234)
+
+#print(x)
+print(y)
+
+
+lr1 = sklearn.linear_model.LogisticRegression(max_iter=1000000)
+lr1.fit(x, y)
+
+
+
+y1 = lr1.predict(x)
+count = 0
+for i, j in enumerate(y):
+    if j == y1[i]:
+        count+=1
+    else:
+        print("Class " + str(j) + " " + str(y1[i]))
+print(y1)
+print("Accuracy = " + str(count/len(y) * 100))
+
+x1 = [[], []]
+x2 = [[], []]
+x3 = [[], []]
+
+weight = lr1.coef_
+normalize = [0, 0, 0, 0]
+print(weight)
+
+for i in x:
+    normalize[0] += i[0]
+    normalize[1] += i[1]
+    normalize[2] += i[2]
+    normalize[3] += i[3]
+
+for i, j in enumerate(x):
+
+    alpha = 90/(len(x[0])-1)
+    temp_y =0
+    temp_x = 0
+    temp_tita = 0
+    for k in range(len(j)):
+        temp_x = temp_x + (weight[int(y[i])][k] * j[k] * math.cos(math.radians(temp_tita))) / normalize[k]
+        temp_y = temp_y + (weight[int(y[i])][k] * j[k] * math.sin(math.radians(temp_tita))) / normalize[k]
+        #temp_x = temp_x + (j[k] * math.cos(math.radians(temp_tita))) / normalize[k]
+        #temp_y = temp_y + (j[k] * math.sin(math.radians(temp_tita))) / normalize[k]
+        temp_tita +=alpha
+
+    if y1[i] == 0:
+        x1[0].append(temp_x)
+        x1[1].append(temp_y)
+    elif y1[i] ==1:
+        x2[0].append(temp_x)
+        x2[1].append(temp_y)
+    else:
+        x3[0].append(temp_x)
+        x3[1].append(temp_y)
+
+print(x1,x2,x3)
+nj = ninja_technique()
+nj.plot_multi(x1, x2, x3)
+
+
+print(lr1.coef_)
+
+
+
+model1 = TSNE(n_components=2)
+
+tsne_data = model1.fit_transform(x)
+classes_dict = {}
+
+for i in range(len(tsne_data)):
+    if y[i] in classes_dict:
+        classes_dict[y[i]].append(tsne_data[i])
+    else:
+        classes_dict[y[i]] = [tsne_data[i]]
+
+print(classes_dict.keys())
+
+x11 = np.array(classes_dict[0]).T
+x21 = np.array(classes_dict[1]).T
+x31 = np.array(classes_dict[2]).T
+
+nj.plot_multi(x11, x21, x31)
+"""
+
+
+
+
+
+
+
+
+
+
+"""
+bc = datasets.load_wine()
+x, y = bc.data, bc.target
+
+print(x)
+print(y)
+
+
+lr1 = sklearn.linear_model.LogisticRegression(max_iter=1000000)
+lr1.fit(x, y)
+
+
+
+y1 = lr1.predict(x)
+count = 0
+for i, j in enumerate(y):
+    if j == y1[i]:
+        count+=1
+    else:
+        print("Class " + str(j) + " " + str(y1[i]))
+print(y1)
+print("Accuracy = " + str(count/len(y) * 100))
+
+x1 = [[], []]
+x2 = [[], []]
+x3 = [[], []]
+
+weight = lr1.coef_
+normalize = [0 for i in range(len(x[0]))]
+print(weight)
+
+for i in x:
+    for j in range(len(i)):
+        normalize[j] += i[j]
+
+
+for i, j in enumerate(x):
+
+    alpha = 90/(len(x[0])-1)
+    temp_y =0
+    temp_x = 0
+    temp_tita = 0
+    for k in range(len(j)):
+        temp_x = temp_x + (weight[int(y[i])][k] * j[k] * math.cos(math.radians(temp_tita))) / normalize[k]
+        temp_y = temp_y + (weight[int(y[i])][k] * j[k] * math.sin(math.radians(temp_tita))) / normalize[k]
+        #temp_x = temp_x + (j[k] * math.cos(math.radians(temp_tita))) / normalize[k]
+        #temp_y = temp_y + (j[k] * math.sin(math.radians(temp_tita))) / normalize[k]
+        temp_tita +=alpha
+
+    if y[i] == 0:
+        x1[0].append(temp_x)
+        x1[1].append(temp_y)
+    elif y[i] ==1:
+        x2[0].append(temp_x)
+        x2[1].append(temp_y)
+    else:
+        x3[0].append(temp_x)
+        x3[1].append(temp_y)
+
+print(x1,x2,x3)
+nj = ninja_technique()
+nj.plot_multi(x1, x2, x3)
+
+
+print(lr1.coef_)
+
+
+
+model1 = TSNE(n_components=2)
+
+tsne_data = model1.fit_transform(x)
+classes_dict = {}
+
+for i in range(len(tsne_data)):
+    if y[i] in classes_dict:
+        classes_dict[y[i]].append(tsne_data[i])
+    else:
+        classes_dict[y[i]] = [tsne_data[i]]
+
+print(classes_dict.keys())
+
+x11 = np.array(classes_dict[0]).T
+x21 = np.array(classes_dict[1]).T
+x31 = np.array(classes_dict[2]).T
+
+nj.plot_multi(x11, x21, x31)
+
+
+"""
+
+
+
+bc = datasets.load_iris()
+x, y = bc.data, bc.target
+
+
+plt = plot_parallel_plot(x, y, class_color=["Red", "Blue", "Green"])
