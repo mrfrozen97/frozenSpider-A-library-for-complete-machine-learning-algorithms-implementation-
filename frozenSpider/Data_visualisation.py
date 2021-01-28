@@ -321,7 +321,8 @@ class Logistic_regression_plot2D():
 
         fig = plt.figure(figsize=(8, 6))
 
-        plt.title(self.title, fontdict={"fontsize": 20})
+        plt.title(self.title,
+                  fontdict=res.Resources.title_dict)
 
 
         if plot_train_data:
@@ -333,8 +334,10 @@ class Logistic_regression_plot2D():
             plt.scatter(class3[0], class3[1], color=self.test_class0_color, alpha=self.test_alpha, label=self.test_class0_label)
             plt.scatter(class4[0], class4[1], color=self.test_class1_color, alpha=self.test_alpha, label=self.test_class1_label)
         plt.legend()
-        plt.xlabel(self.x_label, fontdict={"fontsize": 15})
-        plt.ylabel(self.y_label, fontdict={"fontsize": 15})
+        plt.xlabel(self.x_label,
+                   fontdict=res.Resources.label_dict)
+        plt.ylabel(self.y_label,
+                   fontdict=res.Resources.label_dict)
         if not(save_fig_path=="dont"):
             plt.savefig(save_fig_path + "/2D" + self.title)
 
@@ -1260,10 +1263,11 @@ nj.plot_multi(x11, x21, x31)
 
 """
 
-
+"""
 
 bc = datasets.load_iris()
 x, y = bc.data, bc.target
 
 
-plt = plot_parallel_plot(x, y, class_color=["Red", "Blue", "Green"])
+plt1 = plot_parallel_plot(x, y, class_color=["Red", "Blue", "Green"])
+"""
