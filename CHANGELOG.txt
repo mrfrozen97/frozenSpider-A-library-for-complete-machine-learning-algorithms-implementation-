@@ -1,4 +1,4 @@
 Change Log 0.0.1 (10/01/2021 )- First Release
 Change Log 0.0.3 (18/01/2021)- Upgraded second release
-Change Log 0.0.4 (20/01/2021)- Beta version
+Change Log 0.0.4 (20/01/2021)- Working on newer algorithms
 
