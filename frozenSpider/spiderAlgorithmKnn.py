@@ -286,13 +286,13 @@ class plot_model():
 
 
             plt.title(self.title,
-                      fontdict={"fontsize": 15},
+                      fontdict=res.Resources.title_dict,
                       color=self.title_color)
             plt.xlabel(self.x_label[dimention],
-                       fontdict={"fontsize": 15},
+                       fontdict=res.Resources.label_dict,
                        color=self.xlabel_color)
             plt.ylabel(self.y_label,
-                       fontdict={"fontsize": 15},
+                       fontdict=res.Resources.label_dict,
                        color=self.ylabel_color)
 
 
@@ -321,9 +321,6 @@ class plot_model():
 
 
 
-
-x = [[1, 1], [2, 2], [3, 3]]
-y = [0, 0, 1]
 
 
 bc = datasets.load_breast_cancer()
