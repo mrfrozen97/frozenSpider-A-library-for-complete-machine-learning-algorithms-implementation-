@@ -11,6 +11,7 @@ x, y = dataset.data, dataset.target
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=1234)
 
 
+
 model = lor.LogisticRegression(learning_rate=0.01)
 model.best_fit(x_train, y_train)
 
@@ -26,7 +27,7 @@ plot.set_marker_properties()
 
 
 
-#All the below properties are set default. So you need to change them, only when you want to change it...................................
+#All the below properties are already set default. So you need to change them, only if u wish to...................................
 plot.set_marker_properties(
                               label_default=True,
                               calculated_point_class1_label = "Calculated class 1",
