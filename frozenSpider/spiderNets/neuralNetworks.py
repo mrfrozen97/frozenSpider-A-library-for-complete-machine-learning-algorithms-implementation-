@@ -1,5 +1,7 @@
 import numpy as np
 from nnfs.datasets import spiral_data
+from nnfs.datasets import vertical_data
+import matplotlib.pyplot as plt
 
 np.random.seed(0)
 
@@ -21,7 +23,7 @@ class Layer:
         self.output = np.dot(input, self.weights) + self.biases
 
 
-        return self.relu(self.output)
+        return self.output
 
 
     def relu(self, input):
@@ -43,7 +45,7 @@ class Loss:
 
 
 
-    def calculate_loss(self, y_predict, y_target):
+    def calculate_loss_crossEntropy(self, y_predict, y_target):
 
         cliped_y_predict = np.clip(y_predict, 1e-7, 1 - 1e-7)
 
@@ -62,7 +64,21 @@ class Loss:
 
 
 
-
+def backward ( self , dvalues ):
+    # Create uninitialized array
+    self.dinputs = np.empty_like(dvalues)
+    # Enumerate outputs and gradients
+    for index, (single_output, single_dvalues) in \
+            enumerate ( zip (self.output, dvalues)):
+        # Flatten output array
+        single_output = single_output.reshape( - 1 , 1 )
+        # Calculate Jacobian matrix of the output and
+        jacobian_matrix = np.diagflat(single_output) - \
+        np.dot(single_output, single_output.T)
+        # Calculate sample-wise gradient
+        # and add it to the array of sample gradients
+        self.dinputs[index] = np.dot(jacobian_matrix,
+        single_dvalues)
 
 
 
@@ -76,9 +92,11 @@ x, y = spiral_data(100, 3)
 
 layer1 = Layer(2, 3)
 o1 = layer1.forward(x)
+o1 = layer1.relu(o1)
 #print(o1)
 l2 = Layer(3, 3)
 ab = l2.forward(o1)
+ab = l2.softMax(ab)
 #print(ab)
 
 input = np.array([[1, 2, 3], [-2, -1, 0]])
@@ -86,18 +104,13 @@ target = np.array([[1, 0, 0], [1, 1, 0]])
 softmax_output = layer1.softMax(ab)
 
 loss = Loss()
-lc = loss.calculate_loss(softmax_output, y)
+lc = loss.calculate_loss_crossEntropy(softmax_output, y)
 print(lc)
 
 
-
-
-softmax_outputs = np.array([[ 0.7 , 0.1 , 0.2 ],
-[ 0.1 , 0.5 , 0.4 ],
-[ 0.02 , 0.9 , 0.08 ]])
-
-class_targets = [ 0 , 1 , 1 ]
-print (softmax_outputs[[ 0 , 1 , 2 ], class_targets])
+X, y = vertical_data( samples = 100 , classes = 3 )
+plt.scatter(X[:, 0 ], X[:, 1 ], c = y, s = 40 , cmap = 'brg' )
+plt.show()
 
 
 
