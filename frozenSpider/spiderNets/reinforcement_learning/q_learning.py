@@ -1,15 +1,51 @@
-#import pygame
+"""
+This File implements q_learning algorithm i.e. deep_q_learning
+
+Deep_Q_Learning ha three parts
+1)Game
+2)Agent
+3)Model
+
+This File takes care of Agent and Model
+So u can build any game meeting some basic requirements to implement deep_q_learning
+
+
+#Game Class should have 3 methods to work with this file
+1)Reset
+-> This method should reset the game and store any info if required
+
+2)game_step
+-> This method takes in action and move the game forward and should return the reward, game_over(boolean) and score
+
+3)get_state
+-> This method returns current state of the game which is given to neural nets as an input
+
+
+Then create a object of Deep_q_learning and pass game class object
+then call train method to train the model
+
+
+At the end of the code is an example of using this class
+
+
+"""
+
+
+
+import pygame
 import os
 import random
 from collections import deque
-#from enum import Enum
+from enum import Enum
 import torch
-#import numpy as np
+import numpy as np
 import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as f
-#from collections import namedtuple
+from collections import namedtuple
 import matplotlib.pyplot as plt
+
+
 
 
 
@@ -18,18 +54,26 @@ class Deep_q_learning:
     def __init__(self, game,
                  max_memory=50_000, epsilon=0, gamma=0.9, lr=0.001,
                  outputs=3, inputs=11, hidden_layers=[256],
-                 batch_size=100,  average_last=10,
-                 show_graph=False, plot_every=10, plot_display_time=2):
+                 batch_size=100,  average_last=1,
+                 show_graph=False, plot_every=10, plot_display_time=2,
+                 plot_save_every=None, plot_save_path="", save_model_path="Deep_Q_Model1",
+                 score_threshold=None, load_model_path=None):
+
         self.plot_scores = []
         self.plot_scoresx = []
         self.plot_mean_scores = []
+        self.model_save_path = save_model_path
         self.total_score = 0
+        self.score_threshold = score_threshold
         self.record = 0
+        self.outputs=outputs
+        self.plot_save_path = plot_save_path
+        self.plot_save_every = plot_save_every
         self.average_last = average_last
         self.show_graph = show_graph
         self.agent = Agent(max_memory=max_memory, gamma=gamma, epsilon=epsilon, lr=lr,
                            outputs=outputs, inputs=inputs, hidden_layers=hidden_layers,
-                           batch_size=batch_size)
+                           batch_size=batch_size, load_model_path=load_model_path)
         self.game = game
         self.game.agent = self.agent
         self.valid_game = True
@@ -62,24 +106,43 @@ class Deep_q_learning:
 
 
 
-
-    def plot_graph(self):
-
-        plt.style.use("dark_background")
-        plt.ion()
-        plt.plot(self.plot_scoresx, self.plot_scores, label='Score')
-        plt.plot(self.plot_scoresx, self.plot_mean_scores, label= 'Avg Score')
-        plt.ylabel("Score", fontdict={'size':10, 'color':'blue'})
-        plt.xlabel("Number of Games", fontdict={'size':10, 'color':'blue'})
-        plt.legend()
-        plt.show()
-        plt.pause(self.plot_display_time)
-        plt.close()
+    def plot_graph(self, n_iters):
 
 
+        if (n_iters%self.plot_every == 0) or (n_iters%self.plot_save_every==0) and n_iters!=0:
+            #print('haello!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', n_iters%self.plot_save_every, self.plot_every)
+            plt.style.use("dark_background")
+            plt.ion()
+            plt.plot(self.plot_scoresx, self.plot_scores, label='Score')
+            plt.plot(self.plot_scoresx, self.plot_mean_scores, label= 'Avg Score')
+            plt.ylabel("Score", fontdict={'size':10, 'color':'blue'})
+            plt.xlabel("Number of Games", fontdict={'size':10, 'color':'blue'})
+            plt.legend()
+            if n_iters % self.plot_every == 0:
+                plt.show()
+            if self.plot_save_every and n_iters%self.plot_save_every==0:
+                plt.savefig(self.plot_save_path+str(int(n_iters/self.plot_save_every)))
+            plt.pause(self.plot_display_time)
+            plt.close()
 
 
 
+
+    def play_game(self, end_game_score=None):
+        while True:
+            final_move = [0]*self.outputs
+            state = self.game.get_state()
+            state0 = torch.tensor(state, dtype=torch.float)
+            prediction = self.agent.model(state0)
+            move = torch.argmax(prediction).item()
+            final_move[move] = 1
+            reward, game_over, score = game.play_step(final_move)
+            if game_over:
+                game.reset()
+            if end_game_score:
+                if score>=end_game_score:
+                    print("Score: " + str(score))
+                    break
 
 
 
@@ -100,16 +163,18 @@ class Deep_q_learning:
                 self.agent.train_short_memory(state_old, final_move, reward, state_new, done)
                 self.agent.remember(state_old, final_move, reward, state_new, done)
 
-                if done:
+
+                if done or (self.score_threshold and score>self.score_threshold):
                     n_iters+=1
                     # train long memory
                     self.game.reset()
                     self.agent.n_games += 1
                     self.agent.train_long_memory()
                     self.score = score
+
                     if self.score > self.record:
                         self.record = self.score
-                        self.agent.model.save()
+                        self.agent.model.save(filename=self.model_save_path)
                     print('Game', self.agent.n_games, 'Score', self.score, 'Record:', self.record)
                     self.plot_scores.append(score)
                     self.plot_scoresx.append(n_iters)
@@ -119,16 +184,22 @@ class Deep_q_learning:
                         self.left_score_ptr += 1
                     self.plot_mean_scores.append(self.total_score / min(n_iters, self.average_last))
 
-                    if n_iters%self.plot_every==0:
-                        self.plot_graph()
+
+                    self.plot_graph(n_iters)
         else:
             print("The game object class does not contain the required methods\nCheck if class contains reset, train_step, methods ")
 
 
 
+
+
+
+
+
+
 class Linear_QNet(nn.Module):
 
-    def __init__(self, input_size, hidden_sizes=[256],
+    def __init__(self, input_size=10, hidden_sizes=[256],
                  hidden_activation='relu', output_size=3,
                  dropout=None, input_activation='relu',
                  output_activation='linear'):
@@ -136,16 +207,12 @@ class Linear_QNet(nn.Module):
         temp_size = hidden_sizes[0]
         self.layers = nn.ModuleList()
         self.layers.append(nn.Linear(input_size, temp_size))
-        if len(hidden_sizes)>1:
-            for i in hidden_activation[1:]:
+        if len(hidden_sizes) > 1:
+            for i in range(1, len(hidden_sizes)):
                 self.layers.append(nn.Linear(temp_size, i))
                 temp_size = i
 
         self.layers.append(nn.Linear(temp_size, output_size))
-
-
-
-
 
     def forward(self, x):
         for i in self.layers[:-1]:
@@ -154,120 +221,109 @@ class Linear_QNet(nn.Module):
         x = self.layers[-1](x)
         return x
 
-
-
     def save(self, filename='model.pth'):
-        model_folder_path = './mode'
+        model_folder_path = './model'
         if not os.path.exists(model_folder_path):
             os.makedirs(model_folder_path)
 
         filename = os.path.join(model_folder_path, filename)
-        #torch.save(self.state_dict(), filename)
+        torch.save(self.state_dict(), filename)
 
-
-
-
-
-
-
+    def load_model(self, filepath="model.pth"):
+        self.load_state_dict(torch.load(filepath))
+        self.eval()
 
 
 class QTrainer:
-    def __init__(self, model, lr, gamma):
-        self.lr = lr
-        self.gamma = gamma
-        self.model = model
-        self.criterion = nn.MSELoss()
-        self.optimizer = optim.Adam(model.parameters(), lr=self.lr)
-        self.MINIBATCH_SIZE = 100
+        def __init__(self, model, lr, gamma):
+            self.lr = lr
+            self.gamma = gamma
+            self.model = model
+            self.criterion = nn.MSELoss()
+            self.optimizer = optim.Adam(model.parameters(), lr=self.lr)
+            self.MINIBATCH_SIZE = 100
 
+        def train_step(self, state, action, reward, next_state, done):
 
-    def train_step(self, state, action, reward, next_state, done):
+            state = torch.tensor(state, dtype=torch.float)
+            action = torch.tensor(action, dtype=torch.long)
+            next_state = torch.tensor(next_state, dtype=torch.float)
+            reward = torch.tensor(reward, dtype=torch.float)
 
-        state = torch.tensor(state, dtype=torch.float)
-        action = torch.tensor(action, dtype=torch.long)
-        next_state = torch.tensor(next_state, dtype=torch.float)
-        reward = torch.tensor(reward, dtype=torch.float)
+            if len(state.shape) == 1:
+                state = torch.unsqueeze(state, 0)
+                next_state = torch.unsqueeze(next_state, 0)
+                action = torch.unsqueeze(action, 0)
+                reward = torch.unsqueeze(reward, 0)
+                done = (done,)
 
-        if len(state.shape) == 1:
-            state = torch.unsqueeze(state, 0)
-            next_state = torch.unsqueeze(next_state, 0)
-            action = torch.unsqueeze(action, 0)
-            reward = torch.unsqueeze(reward, 0)
-            done = (done,)
+            pred = self.model(state)
 
-        pred = self.model(state)
+            target = pred.clone()
+            for i in range(len(done)):
+                Q_new = reward[i]
+                if not done[i]:
+                    Q_new = reward[i] + self.gamma * torch.max(self.model(next_state[i]))
 
-        target = pred.clone()
-        for i in range(len(done)):
-            Q_new = reward[i]
-            if not done[i]:
-                Q_new = reward[i] + self.gamma * torch.max(self.model(next_state[i]))
+                target[i][torch.argmax(action).item()] = Q_new
 
-            target[i][torch.argmax(action).item()] = Q_new
+            self.optimizer.zero_grad()
+            loss = self.criterion(target, pred)
+            loss.backward()
 
-        self.optimizer.zero_grad()
-        loss = self.criterion(target, pred)
-        loss.backward()
-
-        self.optimizer.step()
-
-
-
-
-
-
-
-
+            self.optimizer.step()
 
 class Agent:
 
-    def __init__(self, max_memory=50_000, epsilon=0, gamma=0.9, lr=0.001,
-                 outputs=3, inputs=11, hidden_layers=[256],
-                 batch_size=100):
-        self.n_games = 0
-        self.epsilon = epsilon  # Randomness to agent
-        self.memory =deque(maxlen=max_memory)
-        self.batch_size = batch_size
-        self.gamma = gamma
+        def __init__(self, max_memory=50_000, epsilon=0, gamma=0.9, lr=0.001,
+                     outputs=3, inputs=11, hidden_layers=[256],
+                     batch_size=100, load_model_path=None):
+            self.n_games = 0
+            self.epsilon = epsilon  # Randomness to agent
+            self.memory = deque(maxlen=max_memory)
+            self.batch_size = batch_size
+            self.gamma = gamma
+            self.outputs=outputs
 
-        #model
-        self.model = Linear_QNet(inputs, hidden_layers, output_size=outputs)
-        self.trainer = QTrainer(self.model, lr=lr, gamma=self.gamma)
+            # model
+
+            self.model = Linear_QNet(inputs, hidden_layers, output_size=outputs)
+            if load_model_path != None:
+                self.model.load_model("mode/pixel1_deep_q_model")
+            self.trainer = QTrainer(self.model, lr=lr, gamma=self.gamma)
+
+        def remember(self, state, action, reward, next_state, done):
+            self.memory.append((state, action, reward, next_state, done))  # popleft if MAX_MEMORY is reached
+
+        def train_long_memory(self):
+
+            if len(self.memory) > self.batch_size:
+                mini_sample = random.sample(self.memory, self.batch_size)  # list of tuples
+            else:
+                mini_sample = self.memory
+
+            states, actions, rewards, next_states, dones = zip(*mini_sample)
+            self.trainer.train_step(states, actions, rewards, next_states, dones)
+
+        def train_short_memory(self, state, action, reward, next_state, done):
+            self.trainer.train_step(state, action, reward, next_state, done)
+
+        def get_action(self, state):
+            # random moves: tradeoff exploration / exploitation
+            self.epsilon = 80 - self.n_games
+            final_move = [0]*self.outputs
+            if random.randint(0, 200) < self.epsilon:
+                move = random.randint(0, 2)
+                final_move[move] = 1
+            else:
+                state0 = torch.tensor(state, dtype=torch.float)
+                prediction = self.model(state0)
+                move = torch.argmax(prediction).item()
+                final_move[move] = 1
+
+            return final_move
 
 
-    def remember(self, state, action, reward, next_state, done):
-        self.memory.append((state, action, reward, next_state, done))  # popleft if MAX_MEMORY is reached
-
-    def train_long_memory(self):
-
-        if len(self.memory) > self.batch_size:
-            mini_sample = random.sample(self.memory, self.batch_size)  # list of tuples
-        else:
-            mini_sample = self.memory
-
-        states, actions, rewards, next_states, dones = zip(*mini_sample)
-        self.trainer.train_step(states, actions, rewards, next_states, dones)
-
-
-
-    def train_short_memory(self, state, action, reward, next_state, done):
-        self.trainer.train_step(state, action, reward, next_state, done)
-
-    def get_action(self, state):
-        # random moves: tradeoff exploration / exploitation
-        self.epsilon = 80 - self.n_games
-        final_move = [0, 0, 0]
-        if random.randint(0, 200) < self.epsilon:
-            move = random.randint(0, 2)
-            final_move[move] = 1
-        else:
-            state0 = torch.tensor(state, dtype=torch.float)
-            prediction = self.model(state0)
-            move = torch.argmax(prediction).item()
-            final_move[move] = 1
-
-        return final_move
 
 
 
@@ -506,42 +562,26 @@ class SnakeGameAI:
         self.head = Point(x, y)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 def train():
     #agent = Agent()
     game = SnakeGameAI()
-    ql_model = Deep_q_learning(game=game)
+    ql_model = Deep_q_learning(game=game, plot_save_every=50, plot_every=50)
     ql_model.train_model()
-
-
-
-
 
 
 if __name__=='__main__':
     train()
 
-
-
-
-
-
-
-
-
-
 """
+
+
+
+
+
+
+
+
+
 
 
 
